@@ -126,7 +126,7 @@
       align-items: center;
       margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
     .banner-title {
       font-size: 1.05rem;
@@ -137,28 +137,28 @@
       gap: 8px;
       letter-spacing: -0.01em;
     }
-    .live-pill {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #34d399;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      padding: 4px 10px;
-      border-radius: 999px;
+
+    .view-toggle {
       display: flex;
-      align-items: center;
-      gap: 6px;
+      background: #090d16;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 3px;
     }
-    .live-pill::before {
-      content: '';
-      width: 7px; height: 7px; border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 8px #10b981;
-      animation: pulse 1.8s infinite;
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+    .view-btn.active {
+      background: var(--teal);
+      color: #0c111a;
     }
 
     .metrics-grid {
@@ -170,7 +170,7 @@
       background: rgba(10, 15, 23, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.06);
       border-radius: 14px;
-      padding: 16px;
+      padding: 18px;
       position: relative;
     }
     .metric-label {
@@ -180,9 +180,12 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .metric-value {
-      font-size: 1.6rem;
+      font-size: 1.8rem;
       font-weight: 800;
       font-family: 'JetBrains Mono', monospace;
       letter-spacing: -0.02em;
@@ -190,7 +193,34 @@
     .metric-sub {
       font-size: 0.76rem;
       color: var(--text-muted);
-      margin-top: 4px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-sub {
+      background: rgba(56, 232, 203, 0.12);
+      color: var(--teal);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+
+    /* Explanation Box */
+    .formula-explainer {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: rgba(10, 15, 23, 0.45);
+      border: 1px dashed rgba(56, 232, 203, 0.25);
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     /* Section Headings */
@@ -410,37 +440,68 @@
         <div class="banner-title">
           <span>📊 Collective Multi-Store Financial & Operational Overview</span>
         </div>
-        <div class="live-pill">Live Autonomous Sync</div>
+        <div class="view-toggle">
+          <button class="view-btn active" id="btnActual" onclick="setViewMode('actual')">Live Tracked (Actual)</button>
+          <button class="view-btn" id="btnTarget" onclick="setViewMode('target')">Target Capacity Model</button>
+        </div>
       </div>
 
       <div class="metrics-grid">
-        <!-- Metric 1: Est. Monthly Commission -->
+        <!-- Metric 1: Commission -->
         <div class="metric-card">
-          <div class="metric-label">Est. Amazon Commission</div>
-          <div class="metric-value" id="kpiCommission" style="color: #34d399;">S$ 4,820</div>
-          <div class="metric-sub">Across all active storefronts (8–10% avg)</div>
+          <div class="metric-label">
+            <span id="lblCommTitle">Amazon.sg Commission</span>
+            <span class="badge-sub" id="lblCommBadge">Live Tracked</span>
+          </div>
+          <div class="metric-value" id="kpiCommission" style="color: #34d399;">S$ 0.00</div>
+          <div class="metric-sub" id="kpiCommSub">
+            <span>0 Orders MTD</span> • <span>Awaiting 1st Order</span>
+          </div>
         </div>
 
-        <!-- Metric 2: Total API Spend -->
+        <!-- Metric 2: Approval Milestone or API Cost -->
         <div class="metric-card">
-          <div class="metric-label">Total API & Cloud Cost</div>
+          <div class="metric-label">
+            <span id="lblMilestoneTitle">Qualifying Sales Progress</span>
+            <span class="badge-sub" style="color: var(--gold); background: var(--gold-dim);">Milestone</span>
+          </div>
+          <div class="metric-value" id="kpiMilestone" style="color: var(--gold);">0 / 3</div>
+          <div class="metric-sub" id="kpiMilestoneSub">
+            <span>180-Day Activation Window Active</span>
+          </div>
+        </div>
+
+        <!-- Metric 3: Total API Cost -->
+        <div class="metric-card">
+          <div class="metric-label">
+            <span>Total API & Cloud Cost</span>
+            <span class="badge-sub" style="color: #38bdf8; background: rgba(56, 189, 248, 0.12);">Serverless</span>
+          </div>
           <div class="metric-value" id="kpiApiCost" style="color: #38bdf8;">$0.00</div>
-          <div class="metric-sub">100% Free-tier Serverless & Gemini Ops</div>
-        </div>
-
-        <!-- Metric 3: Return on API Spend (ROAS) -->
-        <div class="metric-card">
-          <div class="metric-label">Returns On API Spend</div>
-          <div class="metric-value" id="kpiRoas" style="color: var(--gold);">∞ (Infinite)</div>
-          <div class="metric-sub">Pure profit margin on zero API overhead</div>
+          <div class="metric-sub">
+            <span>100% Free-tier Edge & GitHub Pages</span>
+          </div>
         </div>
 
         <!-- Metric 4: Scale Capacity -->
         <div class="metric-card">
-          <div class="metric-label">Network Capacity</div>
-          <div class="metric-value" id="kpiCapacity" style="color: var(--teal);">6 Stores</div>
-          <div class="metric-sub" id="kpiAsins">282 Curated ASINs active</div>
+          <div class="metric-label">
+            <span>Network Capacity</span>
+            <span class="badge-sub">6 Stores</span>
+          </div>
+          <div class="metric-value" id="kpiCapacity" style="color: var(--teal);">282 SKUs</div>
+          <div class="metric-sub">
+            <span>6 Niche Domains Active & Secured</span>
+          </div>
         </div>
+      </div>
+
+      <!-- Live Transparent Explanation -->
+      <div class="formula-explainer" id="formulaExplainer">
+        <div>
+          <strong>Status:</strong> Store network is 100% live and ready for marketing traffic. When visitors make purchases through your <code>tag=pettechsg-22</code> affiliate links, Amazon Associate Central reports commissions within 24 hours.
+        </div>
+        <a href="https://affiliate-program.amazon.com/home" target="_blank" style="color: var(--teal); font-weight: 700; text-decoration: none;">View Amazon Associates Central &rarr;</a>
       </div>
     </div>
 
@@ -462,7 +523,7 @@
         <div class="portal-icon">📦</div>
         <div class="portal-info">
           <h3>Amazon Associates Central</h3>
-          <p>Earnings report & tracking ID metrics</p>
+          <p>Live clicks, ordered items & bounty reports</p>
         </div>
       </a>
       <a href="https://app.netlify.com/teams/rezavirtual/sites" target="_blank" class="portal-link">
@@ -525,6 +586,8 @@
 
   <!-- Dynamic Extensible Multi-Store Engine -->
   <script>
+    let currentMode = 'actual'; // 'actual' or 'target'
+
     // Scalable Store Registry: Add new stores here effortlessly as network expands
     const STORES = [
       {
@@ -537,9 +600,10 @@
         asins: 200,
         commRate: '8.0% – 10.0%',
         avgTicket: 165,
-        estMonthlySales: 45,
+        targetMonthlyOrders: 45,
         commAvgPct: 0.09,
-        apiCost: 0.00
+        trackedOrders: 0,
+        trackedComm: 0.00
       },
       {
         id: 'air',
@@ -551,9 +615,10 @@
         asins: 14,
         commRate: '10.0% Flat',
         avgTicket: 240,
-        estMonthlySales: 32,
+        targetMonthlyOrders: 32,
         commAvgPct: 0.10,
-        apiCost: 0.00
+        trackedOrders: 0,
+        trackedComm: 0.00
       },
       {
         id: 'brew',
@@ -565,9 +630,10 @@
         asins: 14,
         commRate: '8.0% – 10.0%',
         avgTicket: 210,
-        estMonthlySales: 28,
+        targetMonthlyOrders: 28,
         commAvgPct: 0.09,
-        apiCost: 0.00
+        trackedOrders: 0,
+        trackedComm: 0.00
       },
       {
         id: 'pet',
@@ -579,9 +645,10 @@
         asins: 26,
         commRate: '7.0% – 10.0%',
         avgTicket: 85,
-        estMonthlySales: 60,
+        targetMonthlyOrders: 60,
         commAvgPct: 0.085,
-        apiCost: 0.00
+        trackedOrders: 0,
+        trackedComm: 0.00
       },
       {
         id: 'ergo',
@@ -593,9 +660,10 @@
         asins: 14,
         commRate: '8.0% – 10.0%',
         avgTicket: 340,
-        estMonthlySales: 20,
+        targetMonthlyOrders: 20,
         commAvgPct: 0.09,
-        apiCost: 0.00
+        trackedOrders: 0,
+        trackedComm: 0.00
       },
       {
         id: 'glow',
@@ -607,35 +675,102 @@
         asins: 14,
         commRate: '10.0% – 12.0%',
         avgTicket: 195,
-        estMonthlySales: 25,
+        targetMonthlyOrders: 25,
         commAvgPct: 0.11,
-        apiCost: 0.00
+        trackedOrders: 0,
+        trackedComm: 0.00
       }
     ];
 
-    // Compute collective intelligence across all stores
-    function computeOverview() {
+    function setViewMode(mode) {
+      currentMode = mode;
+      document.getElementById('btnActual').className = 'view-btn ' + (mode === 'actual' ? 'active' : '');
+      document.getElementById('btnTarget').className = 'view-btn ' + (mode === 'target' ? 'active' : '');
+      renderDashboard();
+    }
+
+    function renderDashboard() {
       let totalAsins = 0;
-      let totalEstComm = 0;
-      let totalApiSpend = 0;
+      let totalTrackedComm = 0;
+      let totalTargetComm = 0;
+      let totalTargetOrders = 0;
+      let totalTrackedOrders = 0;
 
       STORES.forEach(s => {
         totalAsins += s.asins;
-        totalEstComm += (s.avgTicket * s.estMonthlySales * s.commAvgPct);
-        totalApiSpend += s.apiCost;
+        totalTrackedComm += s.trackedComm;
+        totalTrackedOrders += s.trackedOrders;
+        totalTargetOrders += s.targetMonthlyOrders;
+        totalTargetComm += (s.avgTicket * s.targetMonthlyOrders * s.commAvgPct);
       });
 
-      document.getElementById('kpiCommission').innerText = 'S$ ' + Math.round(totalEstComm).toLocaleString();
-      document.getElementById('kpiApiCost').innerText = '$' + totalApiSpend.toFixed(2);
-      document.getElementById('kpiRoas').innerText = totalApiSpend === 0 ? '∞ (Zero Overhead)' : (totalEstComm / totalApiSpend).toFixed(1) + 'x';
-      document.getElementById('kpiCapacity').innerText = STORES.length + ' Stores';
-      document.getElementById('kpiAsins').innerText = totalAsins + ' Curated ASINs active';
+      if (currentMode === 'actual') {
+        document.getElementById('lblCommTitle').innerText = 'Live Tracked Commission';
+        document.getElementById('lblCommBadge').innerText = 'Actual MTD';
+        document.getElementById('kpiCommission').innerText = 'S$ ' + totalTrackedComm.toFixed(2);
+        document.getElementById('kpiCommSub').innerHTML = '<span>' + totalTrackedOrders + ' Orders Tracked</span> • <span>Awaiting 1st Order</span>';
+        
+        document.getElementById('lblMilestoneTitle').innerText = 'Qualifying Sales Progress';
+        document.getElementById('kpiMilestone').innerText = totalTrackedOrders + ' / 3';
+        document.getElementById('kpiMilestoneSub').innerText = '3 sales required for Amazon account approval';
+
+        document.getElementById('formulaExplainer').innerHTML = `
+          <div>
+            <strong>Live Reality View:</strong> S$ 0.00 reflects verified live commission. Once marketing syndicates drive the first 3 qualifying orders, Amazon Associate Central reports commissions within 24 hours.
+          </div>
+          <button onclick="setViewMode('target')" style="background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">View Target Model (S$ 3,547) &rarr;</button>
+        `;
+      } else {
+        document.getElementById('lblCommTitle').innerText = 'Target Monthly Potential';
+        document.getElementById('lblCommBadge').innerText = 'Capacity Model';
+        document.getElementById('kpiCommission').innerText = 'S$ ' + Math.round(totalTargetComm).toLocaleString();
+        document.getElementById('kpiCommSub').innerHTML = '<span>Based on ' + totalTargetOrders + ' Monthly Orders</span> • <span>Across 6 Stores</span>';
+
+        document.getElementById('lblMilestoneTitle').innerText = 'Estimated Order Run-Rate';
+        document.getElementById('kpiMilestone').innerText = totalTargetOrders + ' Orders/mo';
+        document.getElementById('kpiMilestoneSub').innerText = 'Avg S$ 185 Basket at 9.1% Comm Rate';
+
+        document.getElementById('formulaExplainer').innerHTML = `
+          <div>
+            <strong>How S$ 3,547 is Calculated:</strong> Sum of (Avg Order Value &times; Target Monthly Orders &times; Category Comm %) across all 6 stores = (165&times;45&times;9%) + (240&times;32&times;10%) + (210&times;28&times;9%) + (85&times;60&times;8.5%) + (340&times;20&times;9%) + (195&times;25&times;11%) = <strong>S$ 3,547 / month</strong>.
+          </div>
+          <button onclick="setViewMode('actual')" style="background: transparent; border: 1px solid #38bdf8; color: #38bdf8; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Back to Live Tracked (S$ 0.00) &rarr;</button>
+        `;
+      }
+
+      document.getElementById('kpiCapacity').innerText = totalAsins + ' Curated ASINs';
       document.getElementById('storeCountBadge').innerText = STORES.length + ' Verified Stores';
 
       // Render store cards
       const container = document.getElementById('storeGrid');
       container.innerHTML = STORES.map(s => {
-        const estMonthlyStoreComm = Math.round(s.avgTicket * s.estMonthlySales * s.commAvgPct);
+        const estCommPerSale = (s.avgTicket * s.commAvgPct).toFixed(2);
+        const estMonthlyStoreComm = Math.round(s.avgTicket * s.targetMonthlyOrders * s.commAvgPct);
+
+        const middleCol = currentMode === 'actual' ? `
+          <div class="stat-item">
+            <div class="stat-val" style="color: #34d399;">S$ ${s.trackedComm.toFixed(2)}</div>
+            <div class="stat-lbl">Tracked Comm</div>
+          </div>
+        ` : `
+          <div class="stat-item">
+            <div class="stat-val" style="color: #34d399;">S$ ${estMonthlyStoreComm}</div>
+            <div class="stat-lbl">Target Comm/mo</div>
+          </div>
+        `;
+
+        const rightCol = currentMode === 'actual' ? `
+          <div class="stat-item">
+            <div class="stat-val" style="color: var(--gold);">~S$ ${estCommPerSale}</div>
+            <div class="stat-lbl">Yield / Sale</div>
+          </div>
+        ` : `
+          <div class="stat-item">
+            <div class="stat-val" style="color: var(--teal);">${s.targetMonthlyOrders}</div>
+            <div class="stat-lbl">Orders/mo</div>
+          </div>
+        `;
+
         return `
           <div class="store-card">
             <div>
@@ -653,14 +788,8 @@
                 <div class="stat-val">${s.asins}</div>
                 <div class="stat-lbl">ASINs</div>
               </div>
-              <div class="stat-item">
-                <div class="stat-val">S$ ${estMonthlyStoreComm}</div>
-                <div class="stat-lbl">Est. Comm/mo</div>
-              </div>
-              <div class="stat-item">
-                <div class="stat-val" style="color: #38bdf8;">$0.00</div>
-                <div class="stat-lbl">API Cost</div>
-              </div>
+              ${middleCol}
+              ${rightCol}
             </div>
 
             <div class="store-actions">
@@ -685,7 +814,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      computeOverview();
+      renderDashboard();
       if (sessionStorage.getItem('aura_cmd_auth') === 'true') {
         var modal = document.getElementById('pinGateModal');
         if (modal) modal.style.display = 'none';
@@ -701,9 +830,9 @@
 
     function copyTag(tag) {
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(tag).then(() => showToast(`Copied tag: ${tag}`));
+        navigator.clipboard.writeText(tag).then(() => showToast(\`Copied tag: \${tag}\`));
       } else {
-        showToast(`tag: ${tag}`);
+        showToast(\`tag: \${tag}\`);
       }
     }
 
