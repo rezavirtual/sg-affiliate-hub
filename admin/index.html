@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SG Affiliate Command Center | Reza Virtual Multi-Store Network</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SG Hub">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f293d;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --emerald: #10b981;
+      --blue: #38bdf8;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #a855f7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 60px; min-height: 100vh; }
+
+    .top-notch {
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--card-border);
+      padding: env(safe-area-inset-top, 16px) 20px 16px 20px;
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-box h1 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
+    .brand-box p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .tag-badge {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+
+    /* KPI Bar */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+    .kpi-val { font-size: 1.4rem; font-weight: 800; color: #fff; }
+    .kpi-lbl { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
+
+    /* Section Headings */
+    .sec-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Store Cards */
+    .store-grid { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
+
+    .store-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+
+    .store-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+    }
+    .card-pettech::before { background: var(--emerald); }
+    .card-ergodesk::before { background: var(--blue); }
+    .card-glowdevice::before { background: var(--purple); }
+    .card-pureair::before { background: #06b6d4; }
+    .card-brewtech::before { background: var(--amber); }
+    .card-camptech::before { background: #16a34a; }
+
+    .store-header { display: flex; justify-content: space-between; align-items: flex-start; }
+    .store-title { font-size: 1.15rem; font-weight: 800; color: #fff; }
+    .store-niche { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+    .comm-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      color: #38bdf8;
+      white-space: nowrap;
+    }
+
+    .store-links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+      text-align: center;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-site {
+      background: #1e293b;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+    }
+    .btn-dash {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+    }
+    .btn-pettech { background: linear-gradient(135deg, #059669, #047857); color: #fff; }
+    .btn-glow { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; }
+    .btn-pureair { background: linear-gradient(135deg, #0891b2, #0e7490); color: #fff; }
+    .btn-brewtech { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; }
+
+    /* Operational Portals */
+    .portals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .portal-link {
+      background: #151e2e;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .portal-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+    .portal-info h3 { font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .portal-info p { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #10b981;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Fixed Bar -->
+  <header class="top-notch">
+    <div class="header-inner">
+      <div class="brand-box">
+        <h1>🇸🇬 Antigravity Command</h1>
+        <p>Reza Virtual Multi-Store E-Commerce Network</p>
+      </div>
+      <div class="tag-badge" onclick="copyTag('pettechsg-22')">
+        <span>tag: <strong>pettechsg-22</strong></span>
+        <span>📋</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- KPI Summary Pills -->
+    <div class="kpi-row">
+      <div class="kpi-pill">
+        <div class="kpi-val" style="color: #38bdf8;">6</div>
+        <div class="kpi-lbl">Active Niches</div>
+      </div>
+      <div class="kpi-pill">
+        <div class="kpi-val" style="color: #34d399;">268</div>
+        <div class="kpi-lbl">Curated ASINs</div>
+      </div>
+      <div class="kpi-pill">
+        <div class="kpi-val" style="color: #fbbf24;">100%</div>
+        <div class="kpi-lbl">Tag Verified</div>
+      </div>
+      <div class="kpi-pill">
+        <div class="kpi-val" style="color: #a78bfa;">$0.00</div>
+        <div class="kpi-lbl">Monthly Cost</div>
+      </div>
+    </div>
+
+    <!-- Storefronts & Dashboards -->
+    <div class="sec-title">🏪 Production Storefronts & Management Dashboards</div>
+    <div class="store-grid">
+
+      <!-- Store 1: PetTech SG -->
+      <div class="store-card card-pettech">
+        <div class="store-header">
+          <div>
+            <div class="store-title">🐾 Store 1: PetTech SG</div>
+            <div class="store-niche">Smart GPS Trackers, Auto Feeders & Pet Fountains</div>
+          </div>
+          <span class="comm-badge">7.0% – 10.0% Comm</span>
+        </div>
+        <div class="store-links">
+          <a href="https://pet.auraequip.com/" target="_blank" class="btn btn-site">Visit Storefront &rarr;</a>
+          <a href="https://pettech-sg.netlify.app/dashboard/" target="_blank" class="btn btn-pettech">📊 Dashboard (8795)</a>
+        </div>
+      </div>
+
+      <!-- Store 2: ErgoDesk SG -->
+      <div class="store-card card-ergodesk">
+        <div class="store-header">
+          <div>
+            <div class="store-title">🪑 Store 2: ErgoDesk SG</div>
+            <div class="store-niche">Electric Standing Desks, Mesh Chairs & Monitor Arms</div>
+          </div>
+          <span class="comm-badge">8.0% – 10.0% Comm</span>
+        </div>
+        <div class="store-links">
+          <a href="https://ergodesk-sg.netlify.app/" target="_blank" class="btn btn-site">Visit Storefront &rarr;</a>
+          <a href="https://ergodesk-sg.netlify.app/dashboard/" target="_blank" class="btn btn-dash">📊 Dashboard (8795)</a>
+        </div>
+      </div>
+
+      <!-- Store 3: GlowDevice SG -->
+      <div class="store-card card-glowdevice">
+        <div class="store-header">
+          <div>
+            <div class="store-title">✨ Store 3: GlowDevice SG</div>
+            <div class="store-niche">Sapphire Cooling IPL, LED Face Masks & Ionic Dryers</div>
+          </div>
+          <span class="comm-badge">10.0% – 12.0% Comm</span>
+        </div>
+        <div class="store-links">
+          <a href="https://glowdevice-sg.netlify.app/" target="_blank" class="btn btn-site">Visit Storefront &rarr;</a>
+          <a href="https://glowdevice-sg.netlify.app/dashboard/" target="_blank" class="btn btn-glow">📊 Dashboard (8795)</a>
+        </div>
+      </div>
+
+      <!-- Store 4: PureAir SG -->
+      <div class="store-card card-pureair">
+        <div class="store-header">
+          <div>
+            <div class="store-title">🍃 Store 4: PureAir SG</div>
+            <div class="store-niche">Compressor Dehumidifiers, HEPA Purifiers & Mold Defense</div>
+          </div>
+          <span class="comm-badge">10.0% Flat Comm</span>
+        </div>
+        <div class="store-links">
+          <a href="https://air.auraequip.com/" target="_blank" class="btn btn-site">Visit Storefront (Live CDN) &rarr;</a>
+          <a href="https://pureair-sg.netlify.app/dashboard/" target="_blank" class="btn btn-pureair">📊 Dashboard (8795)</a>
+        </div>
+      </div>
+
+      <!-- Store 5: BrewTech SG -->
+      <div class="store-card card-brewtech">
+        <div class="store-header">
+          <div>
+            <div class="store-title">☕ Store 5: BrewTech SG</div>
+            <div class="store-niche">Compact Espresso Machines, Conical Burr Grinders & Scales</div>
+          </div>
+          <span class="comm-badge">8.0% – 10.0% Comm</span>
+        </div>
+        <div class="store-links">
+          <a href="https://brewtech-sg.netlify.app/" target="_blank" class="btn btn-site">Visit Storefront (Live CDN) &rarr;</a>
+          <a href="https://brewtech-sg.netlify.app/dashboard/" target="_blank" class="btn btn-brewtech">📊 Dashboard (8795)</a>
+        </div>
+      </div>
+
+    </div>
+
+          <!-- Store 6: CampTech SG -->
+      <div class="store-card card-camptech">
+        <div class="store-header">
+          <div>
+            <div class="store-title">🏕️ Store 6: CampTech SG (200 Items)</div>
+            <div class="store-niche">Camping Moon, Coleman, Columbia, The North Face, Salomon & Power Stations</div>
+          </div>
+          <span class="comm-badge" style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3);">8.0% – 10.0% Comm</span>
+        </div>
+        <div class="store-links">
+          <a href="https://rezavirtual.github.io/camptech-sg/" target="_blank" class="btn btn-site" style="background: #15803d; border-color: #16a34a;">Visit Storefront (GitHub Pages CDN) &rarr;</a>
+          <a href="https://rezavirtual.github.io/camptech-sg/dashboard/" target="_blank" class="btn btn-camptech">📊 Dashboard (8795)</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Operations & External Portals -->
+    <div class="sec-title">⚡ Operational Portals & Cloud Control</div>
+    <div class="portals-grid">
+
+      <!-- Amazon Associates Central -->
+      <a href="https://affiliate-program.amazon.com/home" target="_blank" class="portal-link">
+        <div class="portal-icon">📦</div>
+        <div class="portal-info">
+          <h3>Amazon Associates Central</h3>
+          <p>Earnings report & tracking ID metrics</p>
+        </div>
+      </a>
+
+      <!-- Netlify Team Sites -->
+      <a href="https://app.netlify.com/teams/rezavirtual/sites" target="_blank" class="portal-link">
+        <div class="portal-icon">🚀</div>
+        <div class="portal-info">
+          <h3>Netlify Team Overview</h3>
+          <p>Production edge CDN hosting & deploys</p>
+        </div>
+      </a>
+
+      <!-- GitHub Repositories Hub -->
+      <a href="https://github.com/rezavirtual?tab=repositories" target="_blank" class="portal-link">
+        <div class="portal-icon">🐙</div>
+        <div class="portal-info">
+          <h3>GitHub Repositories Hub</h3>
+          <p>5 Cloud repos & automated 24/7 crons</p>
+        </div>
+      </a>
+
+      <!-- Telegram Bot Alerts -->
+      <a href="https://t.me/PetTechRezaBot" target="_blank" class="portal-link">
+        <div class="portal-icon">💬</div>
+        <div class="portal-info">
+          <h3>@PetTechRezaBot</h3>
+          <p>Automated mobile weekly audit reporter</p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- GitHub Quick Repos Grid -->
+    <div class="sec-title">📁 Direct GitHub Source Code & Actions</div>
+    <div class="portals-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <a href="https://github.com/rezavirtual/pettech-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.1rem;">🐾</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">pettech-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">View Repo & Actions</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/ergodesk-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.1rem;">🪑</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">ergodesk-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">View Repo & Actions</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/glowdevice-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.1rem;">✨</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">glowdevice-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">View Repo & Actions</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/pureair-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.1rem;">🍃</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">pureair-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">View Repo & Actions</p></div>
+      </a>
+            <a href="https://github.com/rezavirtual/camptech-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.1rem;">🏕️</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">camptech-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">View Repo & Actions (200 SKUs)</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/brewtech-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.1rem;">☕</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">brewtech-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">View Repo & Actions</p></div>
+      </a>
+    </div>
+
+  </main>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script>
+    function copyTag(tag) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(tag).then(() => {
+          showToast(`Copied tag: ${tag}`);
+        });
+      } else {
+        showToast(`tag: ${tag}`);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2000);
+    }
+  </script>
+</body>
+</html>
