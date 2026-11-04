@@ -6,7 +6,7 @@ import { execSync } from 'child_process';
 const HUB_DIR = 'C:\\AI\\SG-Affiliate-Hub';
 const DIST_DIR = path.join(HUB_DIR, 'dist');
 const SITE_ID = '5b89bb53-4aed-49a6-bc2e-d49a43ae2806';
-const TOKEN = 'REDACTED_NETLIFY_TOKEN';
+const TOKEN = 'process.env.NETLIFY_TOKEN || ""';
 
 // 1. Prepare dist folder
 if (!fs.existsSync(DIST_DIR)) {

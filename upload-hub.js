@@ -4,7 +4,7 @@ import https from 'https';
 
 const HUB_DIR = 'C:\\AI\\SG-Affiliate-Hub';
 const SITE_ID = '5b89bb53-4aed-49a6-bc2e-d49a43ae2806';
-const TOKEN = 'REDACTED_NETLIFY_TOKEN';
+const TOKEN = 'process.env.NETLIFY_TOKEN || ""';
 const zipPath = path.join(HUB_DIR, 'hub-dist.zip');
 
 if (!fs.existsSync(zipPath)) {
