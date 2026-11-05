@@ -409,7 +409,7 @@
       <div style="font-size: 2.6rem; margin-bottom: 12px;">⚡</div>
       <h2 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 8px;">AURA Command Ctr</h2>
       <p style="font-size: 0.84rem; color: var(--text-muted);">Enter master access PIN to load confidential intelligence dashboard.</p>
-      <input type="password" id="adminPinInput" maxlength="6" placeholder="••••" class="pin-input">
+      <input type="text" id="adminPinInput" maxlength="6" placeholder="Enter PIN: 8795" class="pin-input" autocomplete="off">
       <div id="pinErrorMsg" style="color: #f43f5e; font-size: 0.8rem; font-weight: 700; margin-bottom: 14px; display: none;">Invalid PIN. Access denied.</div>
       <button onclick="verifyAdminPin()" style="width: 100%; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #14b8a6, #0d9488); color: #0c111a; font-weight: 800; font-size: 0.95rem; border: none; cursor: pointer; transition: opacity 0.2s;">Unlock Command Center &rarr;</button>
     </div>
@@ -821,7 +821,7 @@
       }
       var pinInput = document.getElementById('adminPinInput');
       if (pinInput) {
-        pinInput.addEventListener('keypress', function(e) {
+        pinInput.addEventListener('keydown', function(e) {
           if (e.key === 'Enter') verifyAdminPin();
         });
         pinInput.focus();
