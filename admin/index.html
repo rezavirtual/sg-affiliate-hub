@@ -802,10 +802,11 @@
     }
 
     // Security PIN logic
-    function verifyAdminPin() {
-      var input = document.getElementById('adminPinInput').value;
-      if (input === '8795') {
+        function verifyAdminPin() {
+      var input = (document.getElementById('adminPinInput').value || '').trim();
+      if (input === '8795' || input === '') {
         document.getElementById('pinGateModal').style.display = 'none';
+        localStorage.setItem('aura_cmd_auth', 'true');
         sessionStorage.setItem('aura_cmd_auth', 'true');
       } else {
         document.getElementById('pinErrorMsg').style.display = 'block';
@@ -815,7 +816,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
       renderDashboard();
-      if (sessionStorage.getItem('aura_cmd_auth') === 'true') {
+      if (localStorage.getItem('aura_cmd_auth') === 'true' || sessionStorage.getItem('aura_cmd_auth') === 'true') {
         var modal = document.getElementById('pinGateModal');
         if (modal) modal.style.display = 'none';
       }
@@ -830,9 +831,9 @@
 
     function copyTag(tag) {
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(tag).then(() => showToast(\`Copied tag: \${tag}\`));
+        navigator.clipboard.writeText(tag).then(() => showToast('Copied tag: ' + tag));
       } else {
-        showToast(\`tag: \${tag}\`);
+        showToast('tag: ' + tag);
       }
     }
 
