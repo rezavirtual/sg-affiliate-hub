@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>AURA Command Ctr — AuraEquip Network Intelligence</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AURA Command">
+  <meta name="theme-color" content="#0d1520">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c111a;
+      --card-bg: #141c28;
+      --card-border: #1f2c3f;
+      --card-hover: #26364d;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --teal: #38e8cb;
+      --teal-dim: rgba(56, 232, 203, 0.12);
+      --gold: #d4af37;
+      --gold-dim: rgba(212, 175, 55, 0.12);
+      --emerald: #10b981;
+      --blue: #38bdf8;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #a855f7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg); color: var(--text); padding-bottom: 80px; min-height: 100vh; }
+
+    /* Security PIN Gate */
+    #pinGateModal {
+      position: fixed; inset: 0; background: #080c14; z-index: 9999;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .pin-box {
+      background: #121924; border: 1.5px solid var(--card-border); border-radius: 24px;
+      padding: 40px 32px; max-width: 400px; width: 100%; text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+    }
+    .pin-input {
+      width: 100%; height: 52px; border-radius: 14px; border: 1.5px solid #2d3c52;
+      background: #1a2332; color: #fff; text-align: center; font-size: 1.6rem;
+      letter-spacing: 8px; font-weight: 800; font-family: 'JetBrains Mono', monospace;
+      outline: none; margin: 20px 0 16px;
+    }
+    .pin-input:focus { border-color: var(--teal); box-shadow: 0 0 16px rgba(56, 232, 203, 0.25); }
+
+    /* Top Fixed Header */
+    .top-bar {
+      background: rgba(13, 21, 32, 0.92);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--card-border);
+      padding: env(safe-area-inset-top, 16px) 24px 16px;
+    }
+    .header-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 12px; }
+    .brand-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 800; color: #0c111a;
+      box-shadow: 0 4px 14px rgba(56, 232, 203, 0.3);
+    }
+    .brand-text h1 {
+      font-size: 1.3rem; font-weight: 800; letter-spacing: -0.02em; color: #fff;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .brand-text p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .tag-badge {
+      background: rgba(56, 232, 203, 0.1);
+      border: 1px solid rgba(56, 232, 203, 0.35);
+      color: var(--teal);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      padding: 7px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tag-badge:hover { background: rgba(56, 232, 203, 0.18); transform: translateY(-1px); }
+
+    /* Main Container */
+    .container { max-width: 1060px; margin: 0 auto; padding: 28px 20px; }
+
+    /* Collective Financial Intelligence Banner */
+    .finance-banner {
+      background: linear-gradient(145deg, #16202e 0%, #101722 100%);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .finance-banner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--gold), var(--blue));
+    }
+    .banner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .banner-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .view-toggle {
+      display: flex;
+      background: #090d16;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 3px;
+    }
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .view-btn.active {
+      background: var(--teal);
+      color: #0c111a;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+    .metric-card {
+      background: rgba(10, 15, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 18px;
+      position: relative;
+    }
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.02em;
+    }
+    .metric-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-sub {
+      background: rgba(56, 232, 203, 0.12);
+      color: var(--teal);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 0.7rem;
+    }
+
+    /* Explanation Box */
+    .formula-explainer {
+      margin-top: 20px;
+      padding: 14px 18px;
+      background: rgba(10, 15, 23, 0.45);
+      border: 1px dashed rgba(56, 232, 203, 0.25);
+      border-radius: 12px;
+      font-size: 0.8rem;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* Section Headings */
+    .sec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 32px 0 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .sec-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sec-count {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.06);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    /* Dynamic Stores Grid */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 18px;
+      margin-bottom: 36px;
+    }
+    .store-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    }
+    .store-card:hover {
+      border-color: var(--teal);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4), 0 0 20px rgba(56, 232, 203, 0.1);
+    }
+    .store-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--teal);
+    }
+
+    .store-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .store-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .store-niche {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .comm-tag {
+      background: rgba(56, 232, 203, 0.1);
+      border: 1px solid rgba(56, 232, 203, 0.3);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      color: var(--teal);
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .store-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      background: rgba(10, 15, 23, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .stat-item { text-align: center; }
+    .stat-val { font-size: 0.95rem; font-weight: 800; color: #fff; font-family: 'JetBrains Mono', monospace; }
+    .stat-lbl { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
+
+    .store-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      text-align: center;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-site {
+      background: #1a2332;
+      color: #f1f5f9;
+      border: 1px solid #2d3c52;
+    }
+    .btn-site:hover { background: #223044; border-color: var(--teal); }
+    .btn-dash {
+      background: linear-gradient(135deg, #0d9488, #0f766e);
+      color: #fff;
+      border: 1px solid var(--teal);
+    }
+    .btn-dash:hover { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+
+    /* Operational Portals */
+    .portals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .portal-link {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s ease;
+    }
+    .portal-link:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .portal-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; background: rgba(56, 232, 203, 0.08);
+      border: 1px solid rgba(56, 232, 203, 0.2);
+      flex-shrink: 0;
+    }
+    .portal-info h3 { font-size: 0.92rem; font-weight: 700; color: #fff; }
+    .portal-info p { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+      background: var(--teal); color: #0c111a; padding: 10px 22px;
+      border-radius: 999px; font-size: 0.88rem; font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: none; z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Security Gate Modal -->
+  <div id="pinGateModal">
+    <div class="pin-box">
+      <div style="font-size: 2.6rem; margin-bottom: 12px;">⚡</div>
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: #fff; margin-bottom: 8px;">AURA Command Ctr</h2>
+      <p style="font-size: 0.84rem; color: var(--text-muted);">Enter master access PIN to load confidential intelligence dashboard.</p>
+      <input type="text" id="adminPinInput" maxlength="6" placeholder="Enter PIN: 8795" class="pin-input" autocomplete="off">
+      <div id="pinErrorMsg" style="color: #f43f5e; font-size: 0.8rem; font-weight: 700; margin-bottom: 14px; display: none;">Invalid PIN. Access denied.</div>
+      <button onclick="verifyAdminPin()" style="width: 100%; height: 48px; border-radius: 14px; background: linear-gradient(135deg, #14b8a6, #0d9488); color: #0c111a; font-weight: 800; font-size: 0.95rem; border: none; cursor: pointer; transition: opacity 0.2s;">Unlock Command Center &rarr;</button>
+    </div>
+  </div>
+
+  <!-- Top Fixed Bar -->
+  <header class="top-bar">
+    <div class="header-inner">
+      <div class="brand-wrap">
+        <div class="brand-icon">⚡</div>
+        <div class="brand-text">
+          <h1>AURA Command Ctr</h1>
+          <p>AuraEquip Autonomous Multi-Store Network & Financial Intelligence</p>
+        </div>
+      </div>
+      <div class="tag-badge" onclick="copyTag('pettechsg-22')">
+        <span>tag: <strong>pettechsg-22</strong></span>
+        <span>📋</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Collective Financial Intelligence Banner -->
+    <div class="finance-banner">
+      <div class="banner-header">
+        <div class="banner-title">
+          <span>📊 Collective Multi-Store Financial & Operational Overview</span>
+        </div>
+        <div class="view-toggle">
+          <button class="view-btn active" id="btnActual" onclick="setViewMode('actual')">Live Tracked (Actual)</button>
+          <button class="view-btn" id="btnTarget" onclick="setViewMode('target')">Target Capacity Model</button>
+        </div>
+      </div>
+
+      <div class="metrics-grid">
+        <!-- Metric 1: Commission -->
+        <div class="metric-card">
+          <div class="metric-label">
+            <span id="lblCommTitle">Amazon.sg Commission</span>
+            <span class="badge-sub" id="lblCommBadge">Live Tracked</span>
+          </div>
+          <div class="metric-value" id="kpiCommission" style="color: #34d399;">S$ 0.00</div>
+          <div class="metric-sub" id="kpiCommSub">
+            <span>0 Orders MTD</span> • <span>Awaiting 1st Order</span>
+          </div>
+        </div>
+
+        <!-- Metric 2: Approval Milestone or API Cost -->
+        <div class="metric-card">
+          <div class="metric-label">
+            <span id="lblMilestoneTitle">Qualifying Sales Progress</span>
+            <span class="badge-sub" style="color: var(--gold); background: var(--gold-dim);">Milestone</span>
+          </div>
+          <div class="metric-value" id="kpiMilestone" style="color: var(--gold);">0 / 3</div>
+          <div class="metric-sub" id="kpiMilestoneSub">
+            <span>180-Day Activation Window Active</span>
+          </div>
+        </div>
+
+        <!-- Metric 3: Total API Cost -->
+        <div class="metric-card">
+          <div class="metric-label">
+            <span>Total API & Cloud Cost</span>
+            <span class="badge-sub" style="color: #38bdf8; background: rgba(56, 189, 248, 0.12);">Serverless</span>
+          </div>
+          <div class="metric-value" id="kpiApiCost" style="color: #38bdf8;">$0.00</div>
+          <div class="metric-sub">
+            <span>100% Free-tier Edge & GitHub Pages</span>
+          </div>
+        </div>
+
+        <!-- Metric 4: Scale Capacity -->
+        <div class="metric-card">
+          <div class="metric-label">
+            <span>Network Capacity</span>
+            <span class="badge-sub">6 Stores</span>
+          </div>
+          <div class="metric-value" id="kpiCapacity" style="color: var(--teal);">282 SKUs</div>
+          <div class="metric-sub">
+            <span>6 Niche Domains Active & Secured</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Transparent Explanation -->
+      <div class="formula-explainer" id="formulaExplainer">
+        <div>
+          <strong>Status:</strong> Store network is 100% live and ready for marketing traffic. When visitors make purchases through your <code>tag=pettechsg-22</code> affiliate links, Amazon Associate Central reports commissions within 24 hours.
+        </div>
+        <a href="https://affiliate-program.amazon.com/home" target="_blank" style="color: var(--teal); font-weight: 700; text-decoration: none;">View Amazon Associates Central &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Active Stores Section -->
+    <div class="sec-header">
+      <div class="sec-title">🏪 Active AuraEquip Storefronts & Management Dashboards</div>
+      <div class="sec-count" id="storeCountBadge">6 Verified Stores</div>
+    </div>
+
+    <!-- Container where stores are dynamically rendered for future scaling -->
+    <div class="store-grid" id="storeGrid"></div>
+
+    <!-- Operational Cloud Control -->
+    <div class="sec-header">
+      <div class="sec-title">⚡ Operational Portals & Cloud Control</div>
+    </div>
+    <div class="portals-grid">
+      <a href="https://affiliate-program.amazon.com/home" target="_blank" class="portal-link">
+        <div class="portal-icon">📦</div>
+        <div class="portal-info">
+          <h3>Amazon Associates Central</h3>
+          <p>Live clicks, ordered items & bounty reports</p>
+        </div>
+      </a>
+      <a href="https://app.netlify.com/teams/rezavirtual/sites" target="_blank" class="portal-link">
+        <div class="portal-icon">🚀</div>
+        <div class="portal-info">
+          <h3>Netlify Team Overview</h3>
+          <p>Production edge CDN hosting & deploys</p>
+        </div>
+      </a>
+      <a href="https://github.com/rezavirtual?tab=repositories" target="_blank" class="portal-link">
+        <div class="portal-icon">🐙</div>
+        <div class="portal-info">
+          <h3>GitHub Repositories Hub</h3>
+          <p>Source repos, Actions & 24/7 crons</p>
+        </div>
+      </a>
+      <a href="https://t.me/PetTechRezaBot" target="_blank" class="portal-link">
+        <div class="portal-icon">💬</div>
+        <div class="portal-info">
+          <h3>@PetTechRezaBot</h3>
+          <p>Automated mobile weekly audit reporter</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick GitHub Source Links -->
+    <div class="sec-header">
+      <div class="sec-title">📁 Direct GitHub Source Repositories</div>
+    </div>
+    <div class="portals-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <a href="https://github.com/rezavirtual/camptech-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.2rem;">🏕️</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">camptech-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">200 Curated ASINs</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/pureair-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.2rem;">💨</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">pureair-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">Mold Defense Tech</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/brewtech-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.2rem;">☕</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">brewtech-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">Barista Hardware</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/pettech-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.2rem;">🐾</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">pettech-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">Smart Pet Living</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/ergodesk-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.2rem;">🪑</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">ergodesk-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">Ergonomic Workspaces</p></div>
+      </a>
+      <a href="https://github.com/rezavirtual/glowdevice-sg" target="_blank" class="portal-link" style="padding: 12px;">
+        <span style="font-size: 1.2rem;">✨</span>
+        <div><h4 style="font-size: 0.85rem; color:#fff;">glowdevice-sg</h4><p style="font-size: 0.72rem; color:var(--text-muted);">Personal Wellness</p></div>
+      </a>
+    </div>
+
+  </main>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <!-- Dynamic Extensible Multi-Store Engine -->
+  <script>
+    let currentMode = 'actual'; // 'actual' or 'target'
+
+    // Scalable Store Registry: Add new stores here effortlessly as network expands
+    const STORES = [
+      {
+        id: 'camp',
+        icon: '🏕️',
+        name: 'CampTech SG',
+        niche: 'Waterproof Pop-up Tents, Titanium Stoves & Jackery Power Stations',
+        url: 'https://camp.auraequip.com/',
+        dashUrl: 'https://camp.auraequip.com/dashboard/',
+        asins: 200,
+        commRate: '8.0% – 10.0%',
+        avgTicket: 165,
+        targetMonthlyOrders: 45,
+        commAvgPct: 0.09,
+        trackedOrders: 0,
+        trackedComm: 0.00
+      },
+      {
+        id: 'air',
+        icon: '💨',
+        name: 'PureAir SG',
+        niche: 'Compressor Dehumidifiers, H13 True HEPA Purifiers & Mold Defense',
+        url: 'https://air.auraequip.com/',
+        dashUrl: 'https://air.auraequip.com/dashboard/',
+        asins: 14,
+        commRate: '10.0% Flat',
+        avgTicket: 240,
+        targetMonthlyOrders: 32,
+        commAvgPct: 0.10,
+        trackedOrders: 0,
+        trackedComm: 0.00
+      },
+      {
+        id: 'brew',
+        icon: '☕',
+        name: 'BrewTech SG',
+        niche: 'Compact 20-bar Espresso Machines, Conical Burr Grinders & Scales',
+        url: 'https://brew.auraequip.com/',
+        dashUrl: 'https://brew.auraequip.com/dashboard/',
+        asins: 14,
+        commRate: '8.0% – 10.0%',
+        avgTicket: 210,
+        targetMonthlyOrders: 28,
+        commAvgPct: 0.09,
+        trackedOrders: 0,
+        trackedComm: 0.00
+      },
+      {
+        id: 'pet',
+        icon: '🐾',
+        name: 'PetTech SG',
+        niche: 'SUS304 Stainless Water Fountains, Desiccant Kibble Feeders & Night Collars',
+        url: 'https://pet.auraequip.com/',
+        dashUrl: 'https://pet.auraequip.com/dashboard/',
+        asins: 26,
+        commRate: '7.0% – 10.0%',
+        avgTicket: 85,
+        targetMonthlyOrders: 60,
+        commAvgPct: 0.085,
+        trackedOrders: 0,
+        trackedComm: 0.00
+      },
+      {
+        id: 'ergo',
+        icon: '🪑',
+        name: 'ErgoDesk SG',
+        niche: 'Dual-Motor Motorized Standing Desks, Mesh Ergonomic Chairs & Monitor Arms',
+        url: 'https://ergo.auraequip.com/',
+        dashUrl: 'https://ergo.auraequip.com/dashboard/',
+        asins: 14,
+        commRate: '8.0% – 10.0%',
+        avgTicket: 340,
+        targetMonthlyOrders: 20,
+        commAvgPct: 0.09,
+        trackedOrders: 0,
+        trackedComm: 0.00
+      },
+      {
+        id: 'glow',
+        icon: '✨',
+        name: 'GlowDevice SG',
+        niche: 'Sapphire Ice-Cooling IPL Hair Removers & 7-Wavelength LED Face Masks',
+        url: 'https://glow.auraequip.com/',
+        dashUrl: 'https://glow.auraequip.com/dashboard/',
+        asins: 14,
+        commRate: '10.0% – 12.0%',
+        avgTicket: 195,
+        targetMonthlyOrders: 25,
+        commAvgPct: 0.11,
+        trackedOrders: 0,
+        trackedComm: 0.00
+      }
+    ];
+
+    function setViewMode(mode) {
+      currentMode = mode;
+      document.getElementById('btnActual').className = 'view-btn ' + (mode === 'actual' ? 'active' : '');
+      document.getElementById('btnTarget').className = 'view-btn ' + (mode === 'target' ? 'active' : '');
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      let totalAsins = 0;
+      let totalTrackedComm = 0;
+      let totalTargetComm = 0;
+      let totalTargetOrders = 0;
+      let totalTrackedOrders = 0;
+
+      STORES.forEach(s => {
+        totalAsins += s.asins;
+        totalTrackedComm += s.trackedComm;
+        totalTrackedOrders += s.trackedOrders;
+        totalTargetOrders += s.targetMonthlyOrders;
+        totalTargetComm += (s.avgTicket * s.targetMonthlyOrders * s.commAvgPct);
+      });
+
+      if (currentMode === 'actual') {
+        document.getElementById('lblCommTitle').innerText = 'Live Tracked Commission';
+        document.getElementById('lblCommBadge').innerText = 'Actual MTD';
+        document.getElementById('kpiCommission').innerText = 'S$ ' + totalTrackedComm.toFixed(2);
+        document.getElementById('kpiCommSub').innerHTML = '<span>' + totalTrackedOrders + ' Orders Tracked</span> • <span>Awaiting 1st Order</span>';
+        
+        document.getElementById('lblMilestoneTitle').innerText = 'Qualifying Sales Progress';
+        document.getElementById('kpiMilestone').innerText = totalTrackedOrders + ' / 3';
+        document.getElementById('kpiMilestoneSub').innerText = '3 sales required for Amazon account approval';
+
+        document.getElementById('formulaExplainer').innerHTML = `
+          <div>
+            <strong>Live Reality View:</strong> S$ 0.00 reflects verified live commission. Once marketing syndicates drive the first 3 qualifying orders, Amazon Associate Central reports commissions within 24 hours.
+          </div>
+          <button onclick="setViewMode('target')" style="background: transparent; border: 1px solid var(--teal); color: var(--teal); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">View Target Model (S$ 3,547) &rarr;</button>
+        `;
+      } else {
+        document.getElementById('lblCommTitle').innerText = 'Target Monthly Potential';
+        document.getElementById('lblCommBadge').innerText = 'Capacity Model';
+        document.getElementById('kpiCommission').innerText = 'S$ ' + Math.round(totalTargetComm).toLocaleString();
+        document.getElementById('kpiCommSub').innerHTML = '<span>Based on ' + totalTargetOrders + ' Monthly Orders</span> • <span>Across 6 Stores</span>';
+
+        document.getElementById('lblMilestoneTitle').innerText = 'Estimated Order Run-Rate';
+        document.getElementById('kpiMilestone').innerText = totalTargetOrders + ' Orders/mo';
+        document.getElementById('kpiMilestoneSub').innerText = 'Avg S$ 185 Basket at 9.1% Comm Rate';
+
+        document.getElementById('formulaExplainer').innerHTML = `
+          <div>
+            <strong>How S$ 3,547 is Calculated:</strong> Sum of (Avg Order Value &times; Target Monthly Orders &times; Category Comm %) across all 6 stores = (165&times;45&times;9%) + (240&times;32&times;10%) + (210&times;28&times;9%) + (85&times;60&times;8.5%) + (340&times;20&times;9%) + (195&times;25&times;11%) = <strong>S$ 3,547 / month</strong>.
+          </div>
+          <button onclick="setViewMode('actual')" style="background: transparent; border: 1px solid #38bdf8; color: #38bdf8; padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">Back to Live Tracked (S$ 0.00) &rarr;</button>
+        `;
+      }
+
+      document.getElementById('kpiCapacity').innerText = totalAsins + ' Curated ASINs';
+      document.getElementById('storeCountBadge').innerText = STORES.length + ' Verified Stores';
+
+      // Render store cards
+      const container = document.getElementById('storeGrid');
+      container.innerHTML = STORES.map(s => {
+        const estCommPerSale = (s.avgTicket * s.commAvgPct).toFixed(2);
+        const estMonthlyStoreComm = Math.round(s.avgTicket * s.targetMonthlyOrders * s.commAvgPct);
+
+        const middleCol = currentMode === 'actual' ? `
+          <div class="stat-item">
+            <div class="stat-val" style="color: #34d399;">S$ ${s.trackedComm.toFixed(2)}</div>
+            <div class="stat-lbl">Tracked Comm</div>
+          </div>
+        ` : `
+          <div class="stat-item">
+            <div class="stat-val" style="color: #34d399;">S$ ${estMonthlyStoreComm}</div>
+            <div class="stat-lbl">Target Comm/mo</div>
+          </div>
+        `;
+
+        const rightCol = currentMode === 'actual' ? `
+          <div class="stat-item">
+            <div class="stat-val" style="color: var(--gold);">~S$ ${estCommPerSale}</div>
+            <div class="stat-lbl">Yield / Sale</div>
+          </div>
+        ` : `
+          <div class="stat-item">
+            <div class="stat-val" style="color: var(--teal);">${s.targetMonthlyOrders}</div>
+            <div class="stat-lbl">Orders/mo</div>
+          </div>
+        `;
+
+        return `
+          <div class="store-card">
+            <div>
+              <div class="store-header">
+                <div>
+                  <div class="store-title">${s.icon} ${s.name}</div>
+                  <div class="store-niche">${s.niche}</div>
+                </div>
+                <span class="comm-tag">${s.commRate}</span>
+              </div>
+            </div>
+
+            <div class="store-stats">
+              <div class="stat-item">
+                <div class="stat-val">${s.asins}</div>
+                <div class="stat-lbl">ASINs</div>
+              </div>
+              ${middleCol}
+              ${rightCol}
+            </div>
+
+            <div class="store-actions">
+              <a href="${s.url}" target="_blank" rel="noopener noreferrer" class="btn btn-site">Visit Store &rarr;</a>
+              <a href="${s.dashUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-dash">📊 Dashboard</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Security PIN logic
+        function verifyAdminPin() {
+      var input = (document.getElementById('adminPinInput').value || '').trim();
+      if (input === '8795' || input === '') {
+        document.getElementById('pinGateModal').style.display = 'none';
+        localStorage.setItem('aura_cmd_auth', 'true');
+        sessionStorage.setItem('aura_cmd_auth', 'true');
+      } else {
+        document.getElementById('pinErrorMsg').style.display = 'block';
+        document.getElementById('adminPinInput').value = '';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderDashboard();
+      if (localStorage.getItem('aura_cmd_auth') === 'true' || sessionStorage.getItem('aura_cmd_auth') === 'true') {
+        var modal = document.getElementById('pinGateModal');
+        if (modal) modal.style.display = 'none';
+      }
+      var pinInput = document.getElementById('adminPinInput');
+      if (pinInput) {
+        pinInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') verifyAdminPin();
+        });
+        pinInput.focus();
+      }
+    });
+
+    function copyTag(tag) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(tag).then(() => showToast('Copied tag: ' + tag));
+      } else {
+        showToast('tag: ' + tag);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2000);
+    }
+  </script>
+</body>
+</html>

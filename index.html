@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en-SG">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>AuraEquip Singapore — Curated Smart Living & Outdoor Tech</title>
+  <meta name="description" content="AuraEquip is Singapore's curated authority for modern apartment living and tropical adventures. Tested reviews and Prime deals on camping equipment, dehumidifiers, espresso machines, and pet tech.">
+  <meta name="theme-color" content="#1a222d">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #151c26;
+      --card-bg: #1c2533;
+      --card-border: #263447;
+      --card-hover-border: #38e8cb;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --teal: #38e8cb;
+      --teal-dark: #14b8a6;
+      --gold: #d4af37;
+      --gold-light: #e6c86e;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+    body { background: var(--bg); color: var(--text-main); line-height: 1.6; min-height: 100vh; }
+
+    /* Clean Header */
+    .header {
+      padding: 32px 20px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .logo-img {
+      max-width: 240px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      margin-bottom: 16px;
+    }
+    .header-tagline {
+      font-size: 0.95rem;
+      color: var(--teal);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .header-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Simple Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 18px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .card:hover {
+      border-color: var(--card-hover-border);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35), 0 0 15px rgba(56, 232, 203, 0.12);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .card-icon {
+      font-size: 1.8rem;
+      background: rgba(56, 232, 203, 0.08);
+      border: 1px solid rgba(56, 232, 203, 0.2);
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-title h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .card-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      line-height: 1.5;
+    }
+
+    .card-bullets {
+      list-style: none;
+      margin-bottom: 24px;
+    }
+    .card-bullets li {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-bullets li::before {
+      content: '•';
+      color: var(--teal);
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      height: 46px;
+      background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+      color: #0d1520;
+      font-weight: 800;
+      font-size: 0.9rem;
+      text-decoration: none;
+      border-radius: 12px;
+      border: 1px solid var(--teal);
+      transition: all 0.2s ease;
+    }
+    .btn-action:hover {
+      background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%);
+      box-shadow: 0 4px 16px rgba(56, 232, 203, 0.35);
+      color: #090e17;
+    }
+
+    /* Minimal Trust Highlights */
+    .trust-bar {
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 24px 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .trust-box h4 {
+      font-size: 0.9rem;
+      color: var(--teal);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .trust-box p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 30px 20px 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .footer p {
+      font-size: 0.76rem;
+      color: #64748b;
+      max-width: 800px;
+      margin: 0 auto 12px;
+      line-height: 1.5;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      color: #475569;
+    }
+  </style>
+
+  <!-- OpenGraph Social Preview Tags for High CTR -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AuraEquip Singapore">
+  <meta property="og:title" content="AuraEquip Singapore — Curated Smart Living & Outdoor Tech">
+  <meta property="og:description" content="Singapore curated authority for modern apartment living and tropical adventures. Tested reviews and Prime deals on camping equipment, dehumidifiers, and home tech.">
+  <meta property="og:url" content="https://auraequip.com/">
+  <meta property="og:image" content="https://auraequip.com/assets/auraequip-card.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AuraEquip Singapore — Curated Smart Living & Outdoor Tech">
+  <meta name="twitter:description" content="Singapore curated authority for modern apartment living and tropical adventures. Tested reviews and Prime deals on camping equipment, dehumidifiers, and home tech.">
+  <meta name="twitter:image" content="https://auraequip.com/assets/auraequip-card.jpg">
+  <link rel="canonical" href="https://auraequip.com/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","name":"AuraEquip","url":"https://auraequip.com/","logo":"https://auraequip.com/assets/auraequip-logo.jpg"},{"@type":"WebSite","name":"AuraEquip Singapore","url":"https://auraequip.com/","inLanguage":"en-SG","publisher":{"@type":"Organization","name":"AuraEquip"}}]}</script>
+</head>
+<body>
+
+  <!-- Brand Header with Logo -->
+  <header class="header">
+    <a href="https://auraequip.com/">
+      <img src="./assets/auraequip-logo.jpg" alt="AuraEquip Logo" class="logo-img">
+    </a>
+    <div class="header-tagline">Singapore Living & Outdoor Equipment</div>
+    <div class="header-sub">Tested hardware, independent reviews & Prime Singapore dispatch.</div>
+  </header>
+
+  <!-- Main Storefront Grid -->
+  <main class="container">
+    <div class="grid">
+
+      <!-- 1. Camping -->
+      <div class="card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">🏕️</div>
+            <div class="card-title">
+              <h3>Outdoor & Camping</h3>
+              <div class="card-badge">200 Curated Items</div>
+            </div>
+          </div>
+          <p class="card-desc">Waterproof instant pop-up tents, Camping Moon titanium stoves, Jackery outdoor power stations, and tropical apparel.</p>
+          <ul class="card-bullets">
+            <li>Coleman WeatherTec & Pop-up Frames</li>
+            <li>Camping Moon Butane & Wood Stoves</li>
+            <li>Jackery & Anker Outdoor Power Stations</li>
+            <li>Salomon & Columbia Trail Footwear</li>
+          </ul>
+        </div>
+        <a href="https://camp.auraequip.com/" target="_blank" rel="noopener noreferrer" class="btn-action">Browse Camping Catalog &rarr;</a>
+      </div>
+
+      <!-- 2. Dehumidifiers & Air -->
+      <div class="card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">💨</div>
+            <div class="card-title">
+              <h3>Air Care & Dehumidifiers</h3>
+              <div class="card-badge">Mold Defense</div>
+            </div>
+          </div>
+          <p class="card-desc">High-power compressor dehumidifiers and H13 True HEPA purifiers engineered for 90% Singapore relative humidity.</p>
+          <ul class="card-bullets">
+            <li>Heavy-duty wardrobe mold prevention</li>
+            <li>Overnight indoor laundry drying</li>
+            <li>Medical-grade H13 True HEPA filtration</li>
+            <li>Quiet 22dB whisper bedroom operation</li>
+          </ul>
+        </div>
+        <a href="https://air.auraequip.com/" target="_blank" rel="noopener noreferrer" class="btn-action">Explore Air & Mold Care &rarr;</a>
+      </div>
+
+      <!-- 3. Coffee & Espresso -->
+      <div class="card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">☕</div>
+            <div class="card-title">
+              <h3>Coffee & Barista Tech</h3>
+              <div class="card-badge">Home Barista</div>
+            </div>
+          </div>
+          <p class="card-desc">20-bar thermoblock espresso machines, low-retention conical burr grinders, and barista tools for compact kitchens.</p>
+          <ul class="card-bullets">
+            <li>Commercial 20-bar extraction pumps</li>
+            <li>Microfoam stainless steam wands</li>
+            <li>Precision step-less burr grinding</li>
+            <li>Compact footprint for BTO counters</li>
+          </ul>
+        </div>
+        <a href="https://brew.auraequip.com/" target="_blank" rel="noopener noreferrer" class="btn-action">Explore Coffee Equipment &rarr;</a>
+      </div>
+
+      <!-- 4. Smart Pet Tech -->
+      <div class="card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">🐾</div>
+            <div class="card-title">
+              <h3>Smart Pet Living</h3>
+              <div class="card-badge">Feline & Canine Care</div>
+            </div>
+          </div>
+          <p class="card-desc">Medical-grade SUS304 stainless steel water fountains, desiccant moisture-lock automatic feeders, and night collars.</p>
+          <ul class="card-bullets">
+            <li>SUS304 anti-chin-acne fountains</li>
+            <li>Airtight humidity-proof kibble hoppers</li>
+            <li>Ultra-quiet 5V submersible pumps</li>
+            <li>Weatherproof 360° night walk safety</li>
+          </ul>
+        </div>
+        <a href="https://pet.auraequip.com/" target="_blank" rel="noopener noreferrer" class="btn-action">Explore Pet Technology &rarr;</a>
+      </div>
+
+      <!-- 5. Ergonomic Workspaces -->
+      <div class="card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">🪑</div>
+            <div class="card-title">
+              <h3>Ergonomic Workspaces</h3>
+              <div class="card-badge">Work From Home</div>
+            </div>
+          </div>
+          <p class="card-desc">Dual-motor motorized standing desks, breathable mesh ergonomic chairs, and gas-spring monitor arms.</p>
+          <ul class="card-bullets">
+            <li>Dual-motor smooth height adjustment</li>
+            <li>Dynamic lumbar & neck mesh support</li>
+            <li>Integrated cable management systems</li>
+            <li>Compact sizes for Singapore bedrooms</li>
+          </ul>
+        </div>
+        <a href="https://ergo.auraequip.com/" target="_blank" rel="noopener noreferrer" class="btn-action">Explore Workstations &rarr;</a>
+      </div>
+
+      <!-- 6. Personal Wellness & Beauty -->
+      <div class="card">
+        <div>
+          <div class="card-top">
+            <div class="card-icon">✨</div>
+            <div class="card-title">
+              <h3>Personal Wellness Tech</h3>
+              <div class="card-badge">Beauty & Grooming</div>
+            </div>
+          </div>
+          <p class="card-desc">Sapphire ice-cooling painless IPL hair removal, clinical 7-wavelength LED phototherapy masks, and sonic tools.</p>
+          <ul class="card-bullets">
+            <li>10°C sapphire ice contact cooling</li>
+            <li>At-home salon package alternative</li>
+            <li>Multi-spectrum anti-acne LED therapy</li>
+            <li>High-velocity negative ion blow styling</li>
+          </ul>
+        </div>
+        <a href="https://glow.auraequip.com/" target="_blank" rel="noopener noreferrer" class="btn-action">Explore Wellness Tech &rarr;</a>
+      </div>
+
+    </div>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+      <div class="trust-box">
+        <h4>⚡ Amazon Prime Singapore</h4>
+        <p>Next-day doorstep delivery on verified Prime items</p>
+      </div>
+      <div class="trust-box">
+        <h4>🛡️ Singapore 230V Safety</h4>
+        <p>Voltage & 3-pin local appliance compatibility</p>
+      </div>
+      <div class="trust-box">
+        <h4>🔬 Tropical Climate Tested</h4>
+        <p>Tested for 85%–90% humidity & compact HDB layouts</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>
+      <strong>Amazon Associates Disclosure:</strong> AuraEquip (auraequip.com) is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.sg.
+    </p>
+    <div class="footer-copy">&copy; 2026 AuraEquip Singapore. All rights reserved.</div>
+  </footer>
+
+</body>
+</html>
